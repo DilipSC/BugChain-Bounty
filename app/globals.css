@@ -1,26 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-display: 'Orbitron', sans-serif;
+  --font-body: 'Rajdhani', sans-serif;
+  
+  --color-background: 220 20% 4%;
+  --color-foreground: 180 100% 95%;
+  --color-card: 220 25% 7%;
+  --color-card-foreground: 180 100% 95%;
+  --color-popover: 220 25% 7%;
+  --color-popover-foreground: 180 100% 95%;
+  --color-primary: 170 100% 50%;
+  --color-primary-foreground: 220 20% 4%;
+  --color-secondary: 220 30% 12%;
+  --color-secondary-foreground: 180 100% 85%;
+  --color-muted: 220 20% 14%;
+  --color-muted-foreground: 220 15% 55%;
+  --color-accent: 145 100% 50%;
+  --color-accent-foreground: 220 20% 4%;
+  --color-destructive: 0 85% 55%;
+  --color-destructive-foreground: 0 0% 100%;
+  --color-border: 220 30% 15%;
+  --color-input: 220 30% 12%;
+  --color-ring: 170 100% 50%;
+  --color-neon-cyan: 170 100% 50%;
+  --color-neon-green: 145 100% 50%;
+  --color-neon-purple: 270 100% 65%;
+  --color-neon-red: 0 100% 60%;
+  
+  --radius: 0.5rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  body {
+    background: hsl(var(--color-background));
+    color: hsl(var(--color-foreground));
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  
+  .font-body {
+    font-family: var(--font-body);
+  }
+  
+  .text-glow-cyan {
+    text-shadow: 0 0 10px hsl(170 100% 50% / 0.6), 0 0 40px hsl(170 100% 50% / 0.3);
+  }
+
+  .text-glow-green {
+    text-shadow: 0 0 10px hsl(145 100% 50% / 0.6), 0 0 40px hsl(145 100% 50% / 0.3);
+  }
+
+  .border-glow {
+    box-shadow: 0 0 10px hsl(170 100% 50% / 0.2), inset 0 0 10px hsl(170 100% 50% / 0.05);
+  }
+
+  .border-glow-green {
+    box-shadow: 0 0 10px hsl(145 100% 50% / 0.2), inset 0 0 10px hsl(145 100% 50% / 0.05);
+  }
+
+  .bg-grid {
+    background-image: 
+      linear-gradient(hsl(170 100% 50% / 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(170 100% 50% / 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .bg-scanline {
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      hsl(170 100% 50% / 0.02) 2px,
+      hsl(170 100% 50% / 0.02) 4px
+    );
+  }
+
+  .glass {
+    background: hsl(220 25% 7% / 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid hsl(170 100% 50% / 0.1);
+  }
+
+  .cyber-button {
+    position: relative;
+    overflow: hidden;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, hsl(170 100% 50% / 0.15), hsl(145 100% 50% / 0.05));
+    border: 1px solid hsl(170 100% 50% / 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .cyber-button:hover {
+    background: linear-gradient(135deg, hsl(170 100% 50% / 0.25), hsl(145 100% 50% / 0.15));
+    border-color: hsl(170 100% 50% / 0.7);
+    box-shadow: 0 0 25px hsl(170 100% 50% / 0.3), 0 0 60px hsl(170 100% 50% / 0.1);
+  }
+
+  .cyber-button-solid {
+    position: relative;
+    overflow: hidden;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: hsl(170 100% 50%);
+    color: hsl(220 20% 4%);
+    transition: all 0.3s ease;
+  }
+
+  .cyber-button-solid:hover {
+    box-shadow: 0 0 30px hsl(170 100% 50% / 0.5), 0 0 80px hsl(170 100% 50% / 0.2);
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-scan-line {
+    animation: scan-line 8s linear infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes scan-line {
+    0% {
+      top: -5%;
+    }
+    100% {
+      top: 105%;
+    }
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(220 20% 4%);
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(170 100% 50% / 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(170 100% 50% / 0.5);
 }

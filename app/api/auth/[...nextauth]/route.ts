@@ -8,7 +8,7 @@ interface GitHubProfile extends Profile {
   login: string;
 }
 
-const handler = NextAuth({
+export const authOptions = {
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID!,
@@ -52,6 +52,9 @@ const handler = NextAuth({
     },
 
     async jwt({ token, profile, account }) {
+      if (account?.access_token) {
+        token.accessToken = account.access_token
+      }
 
       if (account?.provider === "github" && profile) {
         const githubProfile = profile as GitHubProfile
@@ -62,6 +65,7 @@ const handler = NextAuth({
     },
 
     async session({ session, token }) {
+      session.accessToken = token.accessToken as string | undefined
 
       if (session.user && token.githubId) {
 
@@ -70,7 +74,7 @@ const handler = NextAuth({
         })
 
         if (dbUser) {
-          ;(session.user as any).id = dbUser.id
+          (session.user as any).id = dbUser.id
         }
 
       }
@@ -88,6 +92,8 @@ const handler = NextAuth({
     signIn: "/login"
   }
 
-})
+}
+
+const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }

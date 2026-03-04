@@ -42,11 +42,8 @@ const Navbar = () => {
             </a>
           ))}
           
-          <Link href="/login" className="cyber-button px-5 py-2 rounded text-sm text-primary">
-            Login
-          </Link>
-          <Link href="/signup" className="cyber-button-solid px-5 py-2 rounded text-sm">
-            Sign Up
+          <Link href="/login" className="cyber-button-solid px-5 py-2 rounded text-sm">
+            Get Started
           </Link>
         </div>
 
@@ -80,11 +77,8 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
-              <Link href="/login" className="cyber-button px-5 py-2 rounded text-sm text-primary text-center">
-                Login
-              </Link>
-              <Link href="/signup" className="cyber-button-solid px-5 py-2 rounded text-sm text-center">
-                Sign Up
+              <Link href="/login" className="cyber-button-solid px-5 py-2 rounded text-sm text-center">
+                Get Started
               </Link>
             </div>
           </motion.div>

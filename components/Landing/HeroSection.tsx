@@ -61,7 +61,7 @@ const HeroSection = () => {
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <Link
-            href="/signup"
+            href="/login"
             className="cyber-button-solid px-8 py-3.5 rounded-md text-sm inline-flex items-center justify-center gap-2"
           >
             Start Hunting <ArrowRight className="h-4 w-4" />

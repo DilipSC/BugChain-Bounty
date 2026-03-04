@@ -53,10 +53,7 @@ const Footer = () => {
           </p>
           <div className="flex gap-6">
             <Link href="/login" className="font-body text-xs text-muted-foreground hover:text-primary transition-colors">
-              Login
-            </Link>
-            <Link href="/signup" className="font-body text-xs text-muted-foreground hover:text-primary transition-colors">
-              Sign Up
+              Get Started
             </Link>
           </div>
         </div>

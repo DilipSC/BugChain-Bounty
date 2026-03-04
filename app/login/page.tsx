@@ -2,10 +2,11 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Shield, Github } from "lucide-react";
+import { signIn } from "next-auth/react";
 
 const Login = () => {
   const handleGitHubLogin = () => {
-    
+    signIn("github", { callbackUrl: "/main" });
   };
 
   return (
@@ -26,9 +27,9 @@ const Login = () => {
                 CHAINGUARD
               </span>
             </Link>
-            <h1 className="font-display text-2xl font-bold">Welcome Back</h1>
+            <h1 className="font-display text-2xl font-bold">Welcome to ChainGuard</h1>
             <p className="font-body text-sm text-muted-foreground mt-2">
-              Sign in to your account to continue hunting
+              Sign in with GitHub to start hunting bugs and earning rewards
             </p>
           </div>
 
@@ -37,15 +38,12 @@ const Login = () => {
             className="w-full cyber-button-solid py-3 rounded-md text-sm inline-flex items-center justify-center gap-2"
           >
             <Github className="h-5 w-5" />
-            Login with GitHub
+            Continue with GitHub
           </button>
 
           <div className="mt-6 text-center">
-            <p className="font-body text-sm text-muted-foreground">
-              Don't have an account?{" "}
-              <Link href="/signup" className="text-primary hover:underline font-semibold">
-                Sign Up
-              </Link>
+            <p className="font-body text-xs text-muted-foreground">
+              By signing in, you agree to our Terms of Service and Privacy Policy
             </p>
           </div>
         </div>
@@ -55,3 +53,4 @@ const Login = () => {
 };
 
 export default Login;
+

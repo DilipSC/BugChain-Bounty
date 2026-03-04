@@ -28,16 +28,10 @@ const CTASection = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/signup"
+              href="/login"
               className="cyber-button-solid px-10 py-4 rounded-md text-sm inline-flex items-center justify-center gap-2"
             >
-              Launch Your Program <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/signup"
-              className="cyber-button px-10 py-4 rounded-md text-sm text-primary inline-flex items-center justify-center gap-2"
-            >
-              Join as a Hunter
+              Get Started Now <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </motion.div>

@@ -13,11 +13,86 @@ datasource db {
   provider = "postgresql"
 }
 
+enum PayoutStatus {
+  PENDING_WALLET
+  READY_TO_PAY
+  PAID
+  FAILED
+}
+
 model User {
-  id        String   @id @default(cuid())
-  githubId  String   @unique
-  username  String
-  email     String?
-  avatar    String?
-  createdAt DateTime @default(now())
+  id               String        @id @default(cuid())
+  githubId         String        @unique
+  username         String
+  email            String?
+  avatar           String?
+  walletAddress    String?       @unique
+  createdAt        DateTime      @default(now())
+  listings         RepoListing[]
+  payoutsCreated   Payout[]      @relation("MaintainerPayouts")
+  payoutsReceived  Payout[]      @relation("ContributorPayouts")
+  installations    GitHubAppInstallation[]
+}
+
+model RepoListing {
+  id               String   @id @default(cuid())
+  ownerId          String
+  repoGithubId     Int      @unique
+  repoName         String
+  repoFullName     String   @unique
+  repoUrl          String
+  repoDescription  String?
+  repoOwnerLogin   String
+  repoIsPrivate    Boolean
+  bountyAmount     String
+  currencySymbol   String   @default("ETH")
+  chainId          Int
+  isActive         Boolean  @default(true)
+  isDiscoverable   Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  owner            User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  payouts          Payout[]
+}
+
+model Payout {
+  id                       String       @id @default(cuid())
+  listingId                String
+  maintainerId             String
+  contributorId            String?
+  contributorGithubId      String
+  contributorUsername      String
+  contributorWalletAddress String?
+  pullRequestNumber        Int
+  pullRequestTitle         String
+  pullRequestUrl           String
+  amount                   String
+  currencySymbol           String
+  chainId                  Int
+  status                   PayoutStatus @default(PENDING_WALLET)
+  txHash                   String?
+  txError                  String?
+  mergedAt                 DateTime
+  paidAt                   DateTime?
+  createdAt                DateTime     @default(now())
+  listing                  RepoListing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  maintainer               User         @relation("MaintainerPayouts", fields: [maintainerId], references: [id], onDelete: Cascade)
+  contributor              User?        @relation("ContributorPayouts", fields: [contributorId], references: [id], onDelete: SetNull)
+
+  @@unique([listingId, pullRequestNumber])
+}
+
+model GitHubAppInstallation {
+  id               String   @id @default(cuid())
+  userId           String
+  installationId   Int      @unique
+  accountLogin     String
+  accountType      String
+  targetType       String
+  appSlug          String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, installationId])
 }

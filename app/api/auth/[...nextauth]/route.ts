@@ -1,14 +1,14 @@
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import prisma from "@/lib/prisma";
-import type { Profile } from "next-auth";
+import type { NextAuthOptions, Profile } from "next-auth";
 
 interface GitHubProfile extends Profile {
   id: number;
   login: string;
 }
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID!,
@@ -61,22 +61,29 @@ export const authOptions = {
         token.githubId = String(githubProfile.id)
       }
 
-      return token
-    },
-
-    async session({ session, token }) {
-      session.accessToken = token.accessToken as string | undefined
-
-      if (session.user && token.githubId) {
-
+      if (token.githubId) {
         const dbUser = await prisma.user.findUnique({
           where: { githubId: token.githubId as string }
         })
 
         if (dbUser) {
-          (session.user as any).id = dbUser.id
+          token.userId = dbUser.id
+          token.username = dbUser.username
+          token.walletAddress = dbUser.walletAddress ?? undefined
         }
+      }
 
+      return token
+    },
+
+    async session({ session, token }) {
+      session.accessToken = token.accessToken as string | undefined
+      session.githubId = token.githubId as string | undefined
+
+      if (session.user) {
+        session.user.id = token.userId as string | undefined
+        session.user.username = token.username as string | undefined
+        session.user.walletAddress = token.walletAddress as string | undefined
       }
 
       return session

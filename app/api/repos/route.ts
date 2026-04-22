@@ -1,29 +1,40 @@
-import { getServerSession } from "next-auth"
 import { NextResponse } from "next/server"
-import { authOptions } from "../auth/[...nextauth]/route"
+import { requireCurrentUser } from "@/lib/auth"
+import { listInstallationRepositories } from "@/lib/github-app"
 
 export async function GET() {
-    const session = await getServerSession(authOptions)
+    const current = await requireCurrentUser()
 
-    if (!session?.accessToken) {
+    if (!current) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const response = await fetch("https://api.github.com/user/repos?sort=updated&per_page=50", {
-        headers: {
-            Authorization: `Bearer ${session.accessToken}`,
-            Accept: "application/vnd.github+json",
-        },
-        cache: "no-store",
-    })
+    const installation = current.user.installations[0]
 
-    if (!response.ok) {
-        return NextResponse.json(
-            { error: "Failed to fetch repositories from GitHub" },
-            { status: response.status }
-        )
+    if (!installation) {
+        return NextResponse.json({
+            requiresInstallation: true,
+            repositories: [],
+        })
     }
 
-    const repos = await response.json()
-    return NextResponse.json(repos)
+    try {
+        const repositories = await listInstallationRepositories(installation.installationId)
+
+        return NextResponse.json({
+            requiresInstallation: false,
+            repositories,
+            installation: {
+                accountLogin: installation.accountLogin,
+                installationId: installation.installationId,
+            },
+        })
+    } catch (error) {
+        return NextResponse.json(
+            {
+                error: error instanceof Error ? error.message : "Failed to fetch repositories from GitHub App installation",
+            },
+            { status: 500 }
+        )
+    }
 }

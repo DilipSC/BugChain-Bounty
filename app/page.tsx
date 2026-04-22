@@ -7,6 +7,8 @@ import StatsSection from "@/components/Landing/StatsSection";
 import FAQSection from "@/components/Landing/FAQSection";
 import CTASection from "@/components/Landing/CTASection";
 import Footer from "@/components/Landing/Footer";
+import Link from "next/link";
+import { Search } from "lucide-react";
 
 const Index = () => {
   return (
@@ -14,6 +16,15 @@ const Index = () => {
       <Navbar />
       <main>
         <HeroSection />
+        <section className="container mx-auto px-6 pt-4">
+          <Link
+            href="/bounties"
+            className="cyber-button px-4 py-3 rounded-md text-sm text-primary inline-flex items-center gap-2"
+          >
+            <Search className="h-4 w-4" />
+            Browse Live Bounties
+          </Link>
+        </section>
         <HowItWorksSection />
         <FeaturesSection />
         <StatsSection />
